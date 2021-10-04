@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import GameBoard from "./components/GameBoard";
+import "./App.css";
+import { Fragment, useState } from "react";
 
 function App() {
+  const [resetGame, setResetGame] = useState(true);
+  const [boardSize, setBoardSize] = useState(3);
+  const [cubeSize, setCubeSize] = useState(80);
+  const onSizeChange = (e) => {
+    const _boardSize = parseInt(e.target.value);
+    setBoardSize(_boardSize);
+    const screenWidth =
+      window.innerWidth > 0 ? window.innerWidth : window.screen.width;
+    if (screenWidth <= 480) {
+      if (_boardSize === 5) {
+        setCubeSize(60);
+      } else if (_boardSize === 4) {
+        setCubeSize(70);
+      } else {
+        setCubeSize(80);
+      }
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Fragment>
+      <GameBoard
+        boardSize={parseInt(boardSize)}
+        cubeSize={cubeSize}
+        resetGame={resetGame}
+      >
+        Size{" "}
+        <select
+          onChange={(e) => onSizeChange(e)}
+          value={boardSize}
+          className="size-select"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <option value="3">{" 3 "}</option>
+          <option value="4">{" 4 "}</option>
+          <option value="5">{" 5 "}</option>
+        </select>
+        <button onClick={setResetGame} className="reset-button">
+          RESET
+        </button>
+      </GameBoard>
+    </Fragment>
   );
 }
 
